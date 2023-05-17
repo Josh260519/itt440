@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
             close(socket_desc);
 
             // Send some data
-            message = "connect";
+            message = "Server";
             if (send(new_socket, message, strlen(message), 0) < 0)
             {
                 puts("Send failed");
