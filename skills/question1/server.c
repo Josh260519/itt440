@@ -18,6 +18,8 @@ int main() {
     int addrlen = sizeof(address);
     int random_number;
 
+    srand(time(0));
+
 
     // Create socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
