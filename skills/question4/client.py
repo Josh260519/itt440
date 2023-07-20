@@ -16,10 +16,10 @@ def main():
     while True:
         
         # Ask the user for input
-        user_input = input("Enter 1 to get a Quote of the Day and anything else except 1 to quit: ")
+        user_input = input("Enter q to get a Quote of the Day and anything else except q to quit: ")
 
         # Breaks the loop if anything other than 1 is entered
-        if user_input != '1':
+        if user_input.lower() != "q":
             break
         
         # Send user input
