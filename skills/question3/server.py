@@ -1,3 +1,5 @@
+import socket
+
 # Defining host and port to listen for connections
 host = '192.168.17.128'  # IP Address of host
 port = 8484  # Port to listen to
