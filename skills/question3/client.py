@@ -20,6 +20,7 @@ def main():
     # Connect to the server
     server_address = (server_ip, server_port)
     client_socket.connect(server_address)
+
     while True:
         # Prompt the user for input
         pressure = conversion_input()
@@ -30,9 +31,9 @@ def main():
         # Receive the atm pressure
         atmosphere_pressure = client_socket.recv(1024).decode()
         print(f"Pressure in atmosphere-standard: {atmosphere_pressure} atm")
-    
+
     # Close the connection
     client_socket.close()
 
 if __name__ == "__main__":
-main()
+    main()
