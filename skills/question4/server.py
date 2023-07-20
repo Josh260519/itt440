@@ -14,10 +14,16 @@ quotes = ["People often say that motivation doesn't last. Well, neither does bat
           "I'd rather regret the things I've done than regret the things I haven't done."]
 
 def handle_client(client_socket, client_address):
-    quote = random.choice(quotes)
-    client_socket.send(quote.encode())
-    client_socket.close()
-    print("Connection closed with {}:{}".format(client_address[0], client_address[1]))
+    
+    while True:
+        data = client_socket.recv(1024).decode()
+        if not data:
+            break
+        quote = random.choice(quotes)
+        client_socket.send(quote.encode())
+        
+        client_socket.close()
+        print("Connection closed with {}:{}".format(client_address[0], client_address[1]))
 
 def main():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
