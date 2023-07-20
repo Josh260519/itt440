@@ -1,4 +1,5 @@
 import socket
+import threading
 
 # Defining host and port to listen for connections
 host = '192.168.17.128'  # IP Address of host
@@ -6,7 +7,6 @@ port = 8844  # Port to listen to
 
 def bar_to_atm(pressure):
     return pressure / 1.013
-    
 
 def handle_client(client_socket, client_address):
     # Receive data from the client
@@ -15,6 +15,13 @@ def handle_client(client_socket, client_address):
         if not data:
             break
         print("Received data from {}: {}: {}".format(client_address[0], client_address[1], data))
+
+        try:
+            bar_pressure = float(data)
+            atm_pressure = bar_to_atm(bar_pressure)
+            client_socket.send(str(atm_pressure).encode())
+        except ValueError:
+            client_socket.send(b"Invalid Input")
 
     # Close the client socket
     client_socket.close()
@@ -37,20 +44,9 @@ def main():
         client_socket, client_address = sock.accept()
         print("Connected to {}:{}".format(client_address[0], client_address[1]))
 
-        data = client_socket.recv(1024)
-        if not data:
-            break
-
-        try:
-            bar_pressure = float(data.decode())
-            atm_pressure = bar_to_atm(bar_pressure)
-            client_socket.send(str(atm_pressure).encode())
-        except ValueError:
-            client_socket.send(b"Invalid Input")
-
-        client_socket.close()
-            
-
+        # Create a new thread to handle the client connection
+        client_thread = threading.Thread(target=handle_client, args=(client_socket, client_address))
+        client_thread.start()
 
 if __name__ == '__main__':
     main()
