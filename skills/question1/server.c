@@ -18,8 +18,6 @@ int main() {
     int addrlen = sizeof(address);
     int random_number;
 
-    // Seed the random number generator with the current time
-    srand(time(0));
 
     // Create socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
@@ -47,6 +45,8 @@ int main() {
         perror("listen");
         exit(EXIT_FAILURE);
     }
+
+    printf("Server listening on port %d...\n", PORT);
 
     // Accept a new connection
     if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0) {
