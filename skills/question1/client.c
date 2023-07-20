@@ -3,12 +3,19 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
-#define PORT 8080
 
 int main() {
+    char serverIP[16];
+    int serverPort;
     int sock = 0, valread;
-    struct sockaddr_in serv_addr;
     int random_number;
+
+    printf("Enter the server IP address: ");
+    scanf("%s", serverIP);
+
+    printf("Enter the server port number: ");
+    scanf("%d", &serverPort);
+
 
     // Create socket file descriptor
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -16,17 +23,17 @@ int main() {
         return -1;
     }
 
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(PORT);
+    // Set up server address
+    
+    struct sockaddr_in serverAddress;
+    serverAddress.sin_family = AF_INET;
+    serverAddress.sin_port = htons(serverPort);
+    serverAddress.sin_addr.s_addr = inet_addr(serverIP);
 
-    // Convert IPv4 and IPv6 addresses from text to binary form
-    if (inet_pton(AF_INET, "192.168.17.128", &serv_addr.sin_addr) <= 0) {
-        perror("invalid address/ Address not supported");
-        return -1;
-    }
+
 
     // Connect to the server
-    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+    if (connect(sock, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) < 0) {
         perror("connection failed");
         return -1;
     }
