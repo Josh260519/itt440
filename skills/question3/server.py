@@ -2,6 +2,10 @@
 host = '192.168.17.128'  # IP Address of host
 port = 8484  # Port to listen to
 
+def bar_to_atm(pressure):
+    return pressure / 1.013
+    
+
 def handle_client(client_socket, client_address):
     # Receive data from the client
     while True:
@@ -10,13 +14,6 @@ def handle_client(client_socket, client_address):
             break
         print("Received data from {}: {}: {}".format(client_address[0], client_address[1], data))
 
-        # Combine the client's response with the current date and time
-        current_datetime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        response = "[{}] {}".format(current_datetime, data)
-
-        # Echo the modified response back to the client
-        client_socket.sendall(response.encode('utf-8'))
-
     # Close the client socket
     client_socket.close()
     print("Connection closed with {}:{}".format(client_address[0], client_address[1]))
@@ -24,9 +21,6 @@ def handle_client(client_socket, client_address):
 def main():
     # Create a socket object
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    # Enabling SO_REUSEADDR option
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
     # Bind the socket to the host and port
     sock.bind((host, port))
@@ -41,9 +35,20 @@ def main():
         client_socket, client_address = sock.accept()
         print("Connected to {}:{}".format(client_address[0], client_address[1]))
 
-        # Creates a thread to handle the client
-        client_thread = threading.Thread(target=handle_client, args=(client_socket, client_address))
-        client_thread.start()
+        data = client_socket.recv(1024)
+        if not data:
+            break
+
+        try:
+            bar_pressure = float(data.decode())
+            atm_pressure = bar_to_atm(bar_pressure)
+            client_socket.send(str(atm_pressure).encode())
+        except ValueError:
+            client_socket.send(b"Invalid Input")
+
+        client_socket.close()
+            
+
 
 if __name__ == '__main__':
     main()
