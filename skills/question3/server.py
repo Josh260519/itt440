@@ -2,7 +2,7 @@ import socket
 
 # Defining host and port to listen for connections
 host = '192.168.17.128'  # IP Address of host
-port = 8484  # Port to listen to
+port = 8844  # Port to listen to
 
 def bar_to_atm(pressure):
     return pressure / 1.013
