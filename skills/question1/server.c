@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
-#define PORT 8080
+#define PORT 8844
 
 int generate_random_number() {
     // Generate a random number between 100 and 999
