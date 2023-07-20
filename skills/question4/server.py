@@ -21,9 +21,9 @@ def handle_client(client_socket, client_address):
             break
         quote = random.choice(quotes)
         client_socket.send(quote.encode())
-        
-        client_socket.close()
-        print("Connection closed with {}:{}".format(client_address[0], client_address[1]))
+
+    client_socket.close()
+    print("Connection closed with {}:{}".format(client_address[0], client_address[1]))
 
 def main():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
